@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,9 +66,9 @@
         }
     </style>
 </head>
-​
+
 <body>
-​
+
 <style>
 	.mapboxgl-popup {
 		max-width: 400px;
@@ -88,7 +89,7 @@
 	 
 	#menu a {
 		font-size: 16px;
-​
+
 		display: inline-block;
 		margin: 5px;
 		padding: 0px;
@@ -118,22 +119,22 @@
 		background: #3074a4;
 	}
 </style>
-​
+
 <nav id="menu"></nav>
 <div id='map'></div>
-​
-​
+
+
 <script>
-​
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiamVkbGViaSIsImEiOiJjanhhc3M4NnYwMmxsM3lyODlxYTFhOGRxIn0.746AmyW45uwRPeUy1PczOg';
-​
+
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/jedlebi/ck1ia8jky6s8o1dsaw0sjgp99',
     center: [-100.04, 38.907],
     zoom: 3
 });
-​
+
 map.on('load', function () {
 	
 	// make a pointer cursor
@@ -162,7 +163,7 @@ map.on('load', function () {
 		},
 		trackUserLocation: true
 	}));
-​
+
 	for (var i = 0; i < toggleableLayerIds.length; i++) {
 		var id = toggleableLayerIds[i];
  		var color = colors[i];
