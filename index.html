@@ -77,11 +77,11 @@
 		
 		position: absolute;
 		z-index: 1;
-		top: 82%; 
+		top: 70%; 
 		right: 0px;
 		border-radius: 0;
 		line-height: 20px;
-		width: 175px;
+		width: 140px;
 		
 		font-family: 'Open Sans', sans-serif;
 	}
@@ -129,7 +129,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiamVkbGViaSIsImEiOiJjanhhc3M4NnYwMmxsM3lyODlxY
 
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/jedlebi/ck1ia8jky6s8o1dsaw0sjgp99',
+    style: 'mapbox://styles/jedlebi/cjxm5zbtf1iwe1doc78szgy13',
     center: [-100.04, 38.907],
     zoom: 3
 });
@@ -140,11 +140,247 @@ map.on('load', function () {
     map.getCanvas().style.cursor = 'default';
 	
     // continental US
-    map.fitBounds([[-124.848974, 24.396308], [-66.885444, 49.384358]]);
+    // map.fitBounds([[-130.283740, 20.221380], [-53.815326, 50.998720]]);
+	
+	// Washington, DC
+	map.fitBounds([[-77.493555, 38.724826], [-76.643236, 39.083450]]);
 	
     // define layer names
-    var colors = ['#8a1414', '#3c658b', '#424242'];
-	var toggleableLayerIds = ['Opportunity Zone', 'Gentrified Tract', 'LMI'];
+    var layers = ['Central City Opportunity Zone', 'Eligible', 'Gentrified'];
+    var colors = ['#4b3295', '#828282', '#1b2131'];
+	var toggleableLayerIds = [ 'Central City Opportunity Zone', 'Eligible Tracts', 'Gentrified Tracts' ];
+
+	// Round values to nearest whole integer and include thousand seperators.
+	function round(num) {
+		return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+	}
+	
+	// Round values to nearest second decimal and include thousand seperators.
+	function decimalRound(num) {
+		return num.toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+	}
+		
+    // When a click event occurs on a feature in the layer, open a popup at the
+    // location of the click, with description HTML from its properties.
+    map.on('click', 'tracts-west', function (e) {		
+		new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML("<h3><strong>" + 
+			e.features[0].properties.NEW_PLACE + "<br>" + "GEOID: " +  e.features[0].properties.GEOID +
+			"<br>" + "<br>" +
+			"<font color=#1b2131>" + e.features[0].properties.G_Status + "</font>" +
+			"<br>" +
+			"<font color=#af3131>" + e.features[0].properties.OZone + "</font>" +
+			"</strong></h3>" + 
+			 
+			
+			"<p>" +
+			
+			"<strong>" + 'Population:' + "</strong>" +
+			"<br>" + 
+			'  2010:   ' + round(e.features[0].properties.pop_10) + 
+			"<br>" + 
+			'  2017:   ' + round(e.features[0].properties.pop_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + 'Median Household Income:' + "</strong>" +
+			"<br>" +
+			'  2010:   $' + round(e.features[0].properties.mhi_10) + 
+			"<br>" + 
+			'  2017:   $' + round(e.features[0].properties.mhi_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + 'Median Home Value:' + "</strong>" +
+			"<br>" +
+			'  2010:   $' + round(e.features[0].properties.mhv_10) + 
+			"<br>" + 
+			'  2017:   $' + round(e.features[0].properties.mhv_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + '% of Population with a 4-Year Degree:' + "</strong>" +
+			"<br>" +
+			'  2012:   ' + decimalRound(e.features[0].properties.pcol_12) + "%" +
+			"<br>" + 
+			'  2017:   ' + decimalRound(e.features[0].properties.pcol_17) + "%" +
+			
+			"</p>")
+            .addTo(map);
+    });
+	
+	map.on('click', 'tracts-midwest', function (e) {
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML("<h3><strong>" + 
+			e.features[0].properties.NEW_PLACE + "<br>" + "GEOID: " +  e.features[0].properties.GEOID +
+			"<br>" + "<br>" +
+			"<font color=#1b2131>" + e.features[0].properties.G_Status + "</font>" +
+			"<br>" +
+			"<font color=#af3131>" + e.features[0].properties.OZone + "</font>" +
+			"</strong></h3>" + 
+			 
+			
+			"<p>" +
+			
+			"<strong>" + 'Population:' + "</strong>" +
+			"<br>" + 
+			'  2010:   ' + round(e.features[0].properties.pop_10) + 
+			"<br>" + 
+			'  2017:   ' + round(e.features[0].properties.pop_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + 'Median Household Income:' + "</strong>" +
+			"<br>" +
+			'  2010:   $' + round(e.features[0].properties.mhi_10) + 
+			"<br>" + 
+			'  2017:   $' + round(e.features[0].properties.mhi_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + 'Median Home Value:' + "</strong>" +
+			"<br>" +
+			'  2010:   $' + round(e.features[0].properties.mhv_10) + 
+			"<br>" + 
+			'  2017:   $' + round(e.features[0].properties.mhv_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + '% of Population with a 4-Year Degree:' + "</strong>" +
+			"<br>" +
+			'  2012:   ' + decimalRound(e.features[0].properties.pcol_12) + "%" +
+			"<br>" + 
+			'  2017:   ' + decimalRound(e.features[0].properties.pcol_17) + "%" +
+			
+			"</p>")
+            .addTo(map);
+    });
+	
+	map.on('click', 'tracts-northeast', function (e) {
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML("<h3><strong>" + 
+			e.features[0].properties.NEW_PLACE + "<br>" + "GEOID: " + e.features[0].properties.GEOID +
+			"<br>" + "<br>" +
+			"<font color=#1b2131>" + e.features[0].properties.G_Status + "</font>" +
+			"<br>" +
+			"<font color=#af3131>" + e.features[0].properties.OZone + "</font>" +
+			"</strong></h3>" + 
+			 
+			
+			"<p>" +
+			
+			"<strong>" + 'Population:' + "</strong>" +
+			"<br>" + 
+			'  2010:   ' + round(e.features[0].properties.pop_10) + 
+			"<br>" + 
+			'  2017:   ' + round(e.features[0].properties.pop_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + 'Median Household Income:' + "</strong>" +
+			"<br>" +
+			'  2010:   $' + round(e.features[0].properties.mhi_10) + 
+			"<br>" + 
+			'  2017:   $' + round(e.features[0].properties.mhi_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + 'Median Home Value:' + "</strong>" +
+			"<br>" +
+			'  2010:   $' + round(e.features[0].properties.mhv_10) + 
+			"<br>" + 
+			'  2017:   $' + round(e.features[0].properties.mhv_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + '% of Population with a 4-Year Degree:' + "</strong>" +
+			"<br>" +
+			'  2012:   ' + decimalRound(e.features[0].properties.pcol_12) + "%" +
+			"<br>" + 
+			'  2017:   ' + decimalRound(e.features[0].properties.pcol_17) + "%" +
+			
+			"</p>")
+            .addTo(map);
+    });
+	
+	map.on('click', 'tracts-south', function (e) {
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML("<h3><strong>" + 
+			e.features[0].properties.NEW_PLACE + "<br>" + "GEOID: " + e.features[0].properties.GEOID +
+			"<br>" + "<br>" +
+			"<font color=#1b2131>" + e.features[0].properties.G_Status + "</font>" +
+			"<br>" +
+			"<font color=#af3131>" + e.features[0].properties.OZone + "</font>" +
+			"</strong></h3>" + 
+			 
+			
+			"<p>" +
+			
+			"<strong>" + 'Population:' + "</strong>" +
+			"<br>" + 
+			'  2010:   ' + round(e.features[0].properties.pop_10) + 
+			"<br>" + 
+			'  2017:   ' + round(e.features[0].properties.pop_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + 'Median Household Income:' + "</strong>" +
+			"<br>" +
+			'  2010:   $' + round(e.features[0].properties.mhi_10) + 
+			"<br>" + 
+			'  2017:   $' + round(e.features[0].properties.mhi_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + 'Median Home Value:' + "</strong>" +
+			"<br>" +
+			'  2010:   $' + round(e.features[0].properties.mhv_10) + 
+			"<br>" + 
+			'  2017:   $' + round(e.features[0].properties.mhv_17) +
+			"<br>" +
+			
+			"<br>" +
+			"<strong>" + '% of Population with a 4-Year Degree:' + "</strong>" +
+			"<br>" +
+			'  2012:   ' + decimalRound(e.features[0].properties.pcol_12) + "%" +
+			"<br>" + 
+			'  2017:   ' + decimalRound(e.features[0].properties.pcol_17) + "%" +
+			
+			"</p>")
+            .addTo(map);
+    });
+
+    // Change the cursor to a pointer when the mouse is over the layer.
+    map.on('mouseenter', 'tracts-northeast', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+	map.on('mouseenter', 'tracts-midwest', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+	map.on('mouseenter', 'tracts-west', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+	map.on('mouseenter', 'tracts-south', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'tracts-northeast', function () {
+        map.getCanvas().style.cursor = '';
+    });
+	map.on('mouseleave', 'tracts-midwest', function () {
+        map.getCanvas().style.cursor = '';
+    });
+	map.on('mouseleave', 'tracts-west', function () {
+        map.getCanvas().style.cursor = '';		
+    });
+	map.on('mouseleave', 'tracts-south', function () {
+        map.getCanvas().style.cursor = '';
+    });
 	
 	// Add a search bar to the map.
 	map.addControl(new MapboxGeocoder({
@@ -162,6 +398,9 @@ map.on('load', function () {
 		},
 		trackUserLocation: true
 	}));
+
+	// Add zoom and rotation controls to the map.
+	map.addControl(new mapboxgl.NavigationControl());
 
 	for (var i = 0; i < toggleableLayerIds.length; i++) {
 		var id = toggleableLayerIds[i];
@@ -196,7 +435,25 @@ map.on('load', function () {
 		fills.appendChild(key);
 		fills.appendChild(link);
 	}
+
+ // create legend <div class='map-overlay' id='legend'></div>
+ //   for (i=0; i<layers.length; i++) {
+ //       var layer = layers[i];
+ //       var color = colors[i];
+ //       var item = document.createElement('div');
+ //       var key = document.createElement('span');
+ //       key.className = 'legend-key';
+ //       key.style.backgroundColor = color;
+ //
+    //    var value = document.createElement('span');
+    //    value.innerHTML = layer;
+    //    item.appendChild(key);
+    //    item.appendChild(value);
+    //    legend.appendChild(item);
+ //   }
+
 });
+
 </script>
 </body>
 </html>
